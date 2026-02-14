@@ -50,33 +50,72 @@ exports.getAllUsers = async (req, res) => {
 };
 
 
+/**
+ * ===================================
+ * APPROVE USER (POST)
+ * ===================================
+ */
 exports.approveUser = async (req, res) => {
+  console.log("➡️ APPROVE USER API HIT");
+  console.log("📥 Body:", req.body);
+
   try {
-    const { id } = req.params;
+    const { id } = req.body;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID required"
+      });
+    }
 
     const [result] = await db.query(
-      "UPDATE users SET is_approved = 1 WHERE id = ?",
+      "UPDATE users SET is_approved = 1, is_active = 1 WHERE id = ?",
       [id]
     );
 
     if (!result.affectedRows) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
     }
+
+    console.log("✅ User approved:", id);
 
     res.json({
       success: true,
-      message: "User approved successfully",
+      message: "User approved successfully"
     });
+
   } catch (err) {
-    console.error("APPROVE ERROR:", err);
-    res.status(500).json({ message: "Failed to approve user" });
+    console.error("❌ APPROVE ERROR:", err.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to approve user"
+    });
   }
 };
 
 
+/**
+ * ===================================
+ * DECLINE USER (POST)
+ * ===================================
+ */
 exports.declineUser = async (req, res) => {
+  console.log("➡️ DECLINE USER API HIT");
+  console.log("📥 Body:", req.body);
+
   try {
-    const { id } = req.params;
+    const { id } = req.body;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID required"
+      });
+    }
 
     const [result] = await db.query(
       "UPDATE users SET is_approved = 0, is_active = 0 WHERE id = ?",
@@ -84,23 +123,46 @@ exports.declineUser = async (req, res) => {
     );
 
     if (!result.affectedRows) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
     }
+
+    console.log("✅ User declined:", id);
 
     res.json({
       success: true,
-      message: "User declined successfully",
+      message: "User declined successfully"
     });
+
   } catch (err) {
-    console.error("DECLINE ERROR:", err);
-    res.status(500).json({ message: "Failed to decline user" });
+    console.error("❌ DECLINE ERROR:", err.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to decline user"
+    });
   }
 };
 
-
+/**
+ * ===================================
+ * DELETE USER (POST)
+ * ===================================
+ */
 exports.deleteUser = async (req, res) => {
+  console.log("➡️ DELETE USER API HIT");
+  console.log("📥 Body:", req.body);
+
   try {
-    const { id } = req.params;
+    const { id } = req.body;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID required"
+      });
+    }
 
     const [result] = await db.query(
       "DELETE FROM users WHERE id = ?",
@@ -108,16 +170,25 @@ exports.deleteUser = async (req, res) => {
     );
 
     if (!result.affectedRows) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
     }
+
+    console.log("✅ User deleted:", id);
 
     res.json({
       success: true,
-      message: "User deleted permanently",
+      message: "User deleted permanently"
     });
+
   } catch (err) {
-    console.error("DELETE ERROR:", err);
-    res.status(500).json({ message: "Failed to delete user" });
+    console.error("❌ DELETE ERROR:", err.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete user"
+    });
   }
 };
 

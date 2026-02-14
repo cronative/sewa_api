@@ -6,8 +6,8 @@ const usersController = require("../controllers/users.controller");
 router.get("/fetchAll", usersController.getAllUsers);
 
 // Actions
-router.put("/users/:id/approve", usersController.approveUser);
-router.put("/users/:id/decline", usersController.declineUser);
-router.delete("/users/:id", usersController.deleteUser);
+router.post("/approve", usersController.approveUser);
+router.post("/decline", usersController.declineUser);
+router.post("/delete", usersController.deleteUser);
 
 module.exports = router;
