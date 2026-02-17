@@ -101,10 +101,8 @@ exports.getCustomCoursesWithFilteredData = async (req, res) => {
            cc.title,
            cc.description,
            cc.created_at,
-
            ccm.default_course_id,
            ccm.module_ids,
-
            e.id AS exam_id,
            e.title AS exam_title,
            e.description AS exam_description,
